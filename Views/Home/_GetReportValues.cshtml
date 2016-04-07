@@ -1,0 +1,105 @@
+﻿@using MyWeatherAPI.Models.WeatherAPI
+@model MyWeatherAPI.ViewModel.wholeWeather
+@{
+    ViewBag.Title = "Index";
+}
+
+<body>
+
+    <strong>@Model.rootWeatherAPI.city.name</strong>
+
+    <img src="http://openweathermap.org/img/w/@(Model.rootWeatherAPI.list[0].weather[0].icon).png" />
+    @Model.rootWeatherAPI.list[0].main.temp <code>&deg;C</code>
+
+    @*Get the chart*@
+
+    @(Model.charts)
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/HighChart")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/modernizr")
+    }
+
+    <br />
+
+    <br />
+
+
+    @*Get the weather data for 5 days*@
+
+    <h3><strong>Next 5 days</strong></h3>
+
+
+    <table>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td><div class="label label-success">Description</div></td>
+            <td><div class="label label-success">Temp. ( &deg;C )</div> </td>
+            <td><div class="label label-success">Temp. Max ( &deg;C )</div></td>
+            <td><div class="label label-success">Temp. Min ( &deg;C )</div></td>
+            <td><div class="label label-success">Pressure ( hpa )</div></td>
+            <td><div class="label label-success">Humidity ( % )</div></td>
+            <td><div class="label label-success">Hour ( h )</div></td>
+
+        </tr>
+
+        @foreach (KeyValuePair<string, List<List>> entry in Model.WeatherByDays)
+        {
+            @Html.Raw("<tr>")
+
+            @Html.Raw("<td>")
+            <code>@entry.Key</code>
+
+            @Html.Raw("</td>")
+
+
+
+            foreach (List item in entry.Value)
+            {
+                @Html.Raw("<tr style='border: 1px solid #dff0d8'; >")
+                <td></td>
+
+                <td>
+                    <img src="http://openweathermap.org/img/w/@(item.weather[0].icon).png" />
+                </td>
+                <td>
+                    @item.weather[0].description
+                </td>
+                <td> @item.main.temp  </td>
+                <td> @item.main.temp_max</td>
+                <td> @item.main.temp_min</td>
+                <td> @item.main.pressure</td>
+                <td> @item.main.humidity</td>
+
+                string sub = @item.dt_txt.Substring(@item.dt_txt.IndexOf(" ") + 1);
+
+                <td> @sub</td>
+                @Html.Raw("</tr>");
+
+            }
+            @Html.Raw("</tr>")
+        }
+        </>
+    </table>
+
+</body>
+
+
+<script>
+    function initMap() {
+        //get the HTML input element for the autocomplete search box
+        var input = (document.getElementById('cityName'));
+        // autocomplete object
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+            var place = autocomplete.getPlace();
+            console.log('place: ', place);
+        });
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCn2Qc_Nojz4qJTl9zvClHQ4K-qWofjbs&libraries=places&callback=initMap"></script>

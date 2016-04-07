@@ -1,0 +1,47 @@
+﻿<body>
+
+    <h3><strong>Weather in your city</strong></h3>
+    <br />
+    <div class="well well-lg">
+        <div class="main-content">
+
+            @using (Html.BeginForm("GetReportValues", "Home", FormMethod.Post, new { @class = "example" }))
+            {
+
+                <form class="form-horizontal">
+                    <fieldset>
+
+
+
+                        <div class="form-group">
+                            @Html.TextBox("cityName", "", new { @class = "form-control" })
+                            <input class="btn btn-default" type="submit" value="Search" />
+
+                        </div>
+
+
+                    </fieldset>
+                </form>
+
+            }
+
+        </div>
+    </div>
+</body>
+
+
+<script>
+    function initMap() {
+        //get the HTML input element for the autocomplete search box
+        var input = (document.getElementById('cityName'));
+        // autocomplete object
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+            var place = autocomplete.getPlace();
+            console.log('place: ', place);
+        });
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=xx&libraries=places&callback=initMap"></script>

@@ -1,0 +1,16 @@
+﻿@model MyWeatherAPI.ViewModel.wholeWeather
+
+@{
+    ViewBag.Title = "Weather";
+}
+
+<br />
+
+@Html.Partial("_GetCity")
+@Html.Partial("_GetReportValues")
+
+@section Scripts {
+@Scripts.Render("~/bundles/HighChart")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/modernizr")
+}
